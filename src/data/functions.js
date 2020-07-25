@@ -1,5 +1,4 @@
 export const haversineDistance = (question, answer) => {
-  console.log(question, answer);
   const lat1 = +question.lat;
   const long1 = +question.lng;
   const lat2 = answer.lat;

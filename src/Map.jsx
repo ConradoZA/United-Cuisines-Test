@@ -41,7 +41,6 @@ export const Map = () => {
       )
     );
   };
-  console.log(distance);
   return (
     <div className="map">
       <EuropeMap

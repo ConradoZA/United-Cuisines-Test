@@ -18,8 +18,8 @@ export const EuropeMap = (props) => {
   }, []);
 
   const CONTAINER_STYLE = {
-    width: "88vmin",
-    height: "88vmin",
+    width: "100vmin",
+    height: "100vmin",
   };
 
   const EUROPE_BOUNDS = {
