@@ -3,9 +3,9 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 import mapStyles from "../data/mapStyles";
 
 export const EuropeMap = (props) => {
-  const onClick = props.onClick;
   const question = props.question;
   const result = props.result;
+  const onClick = props.onClick;
   const [map, setMap] = useState(null);
   const mapRef = useRef();
 
@@ -18,8 +18,8 @@ export const EuropeMap = (props) => {
   }, []);
 
   const CONTAINER_STYLE = {
-    width: "100vmin",
-    height: "100vmin",
+    width: "88vmin",
+    height: "88vmin",
   };
 
   const EUROPE_BOUNDS = {
