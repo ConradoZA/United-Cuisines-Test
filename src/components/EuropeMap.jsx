@@ -1,12 +1,26 @@
-// @ts-ignore
 import React, { useState, useCallback, useRef } from "react";
-import { GoogleMap } from "@react-google-maps/api";
+import { GoogleMap, Marker } from "@react-google-maps/api";
 import mapStyles from "../data/mapStyles";
 
-export const EuropeMap = () => {
+export const EuropeMap = (props) => {
+  const onClick = props.onClick;
+  const question = props.question;
+  const result = props.result;
   const [map, setMap] = useState(null);
-  const [result, setResult] = useState({});
   const mapRef = useRef();
+
+  const onLoad = useCallback((map) => {
+    mapRef.current = map;
+  }, []);
+
+  const onUnmount = useCallback((map) => {
+    setMap(null);
+  }, []);
+
+  const CONTAINER_STYLE = {
+    width: "100vmin",
+    height: "100vmin",
+  };
 
   const EUROPE_BOUNDS = {
     latLngBounds: {
@@ -17,32 +31,18 @@ export const EuropeMap = () => {
     },
     strictBounds: false,
   };
-  const onLoad = useCallback((map) => {
-    mapRef.current = map;
-  }, []);
 
-  const onUnmount = useCallback((map) => {
-    setMap(null);
-  }, []);
-  const onClick = (event) => {
-    setResult({
-      lat: event.latLng.lat(),
-      lng: event.latLng.lng(),
-    });
-    console.log(result);
+  // const CENTER = {
+  //   lat: 57.2402108,
+  //   lng: 14.7150791,
+  // };
+
+  const CENTER = {
+    lat: 50.110882,
+    lng: 8.67949,
   };
 
-  const containerStyle = {
-    width: "100vmin",
-    height: "100vmin",
-  };
-
-  const center = {
-    lat: 57.2402108,
-    lng: 14.7150791,
-  };
-
-  const options = {
+  const OPTIONS = {
     styles: mapStyles,
     disableDefaultUI: true,
     zoomControl: true,
@@ -52,13 +52,32 @@ export const EuropeMap = () => {
 
   return (
     <GoogleMap
-      mapContainerStyle={containerStyle}
-      zoom={1}
-      center={center}
-      options={options}
+      mapContainerStyle={CONTAINER_STYLE}
+      zoom={1.5}
+      center={CENTER}
+      options={OPTIONS}
       onLoad={onLoad}
       onUnmount={onUnmount}
       onClick={onClick}
-    />
+    >
+      {Object.keys(result).length > 0 && (
+        <>
+          <Marker
+            position={{ lat: +question.lat, lng: +question.lng }}
+            icon={{
+              url: `/gps.svg`,
+              scaledSize: new window.google.maps.Size(20, 20),
+            }}
+          />
+          <Marker
+            position={{ lat: result.lat, lng: result.lng }}
+            icon={{
+              url: `/location-pin.svg`,
+              scaledSize: new window.google.maps.Size(20, 30),
+            }}
+          />
+        </>
+      )}
+    </GoogleMap>
   );
 };
