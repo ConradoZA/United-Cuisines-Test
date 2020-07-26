@@ -1,21 +1,33 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import mapStyles from "../data/mapStyles";
 
-export const EuropeMap = (props) => {
-  const question = props.question;
-  const result = props.result;
-  const onClick = props.onClick;
-  const [map, setMap] = useState(null);
+export const Map = ({ question, result, onMapClick, display }) => {
   const mapRef = useRef();
+
+  const EUROPE_CENTER = {
+    lat: 50.110882,
+    lng: 8.67949,
+  };
+
+  const panTo = (coordinates) => {
+    mapRef.current.panTo(coordinates);
+  };
+  const setZoom = (number) => {
+    mapRef.current.setZoom(number);
+  };
 
   const onLoad = useCallback((map) => {
     mapRef.current = map;
+    panTo(EUROPE_CENTER);
   }, []);
 
-  const onUnmount = useCallback((map) => {
-    setMap(null);
-  }, []);
+  const onClick = (event) => {
+    const coordinates = { lat: event.latLng.lat(), lng: event.latLng.lng() };
+    panTo(coordinates);
+    setZoom(5);
+    onMapClick(coordinates);
+  };
 
   const CONTAINER_STYLE = {
     width: "100vmin",
@@ -32,16 +44,6 @@ export const EuropeMap = (props) => {
     strictBounds: false,
   };
 
-  // const CENTER = {
-  //   lat: 57.2402108,
-  //   lng: 14.7150791,
-  // };
-
-  const CENTER = {
-    lat: 50.110882,
-    lng: 8.67949,
-  };
-
   const OPTIONS = {
     styles: mapStyles,
     disableDefaultUI: true,
@@ -54,10 +56,8 @@ export const EuropeMap = (props) => {
     <GoogleMap
       mapContainerStyle={CONTAINER_STYLE}
       zoom={1.5}
-      center={CENTER}
       options={OPTIONS}
       onLoad={onLoad}
-      onUnmount={onUnmount}
       onClick={onClick}
     >
       {Object.keys(result).length > 0 && (
@@ -67,6 +67,7 @@ export const EuropeMap = (props) => {
             icon={{
               url: `/gps.svg`,
               scaledSize: new window.google.maps.Size(20, 20),
+              style: { display: display },
             }}
           />
           <Marker

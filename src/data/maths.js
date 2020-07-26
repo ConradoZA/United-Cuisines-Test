@@ -26,6 +26,12 @@ export const haversineDistance = (question, answer) => {
   return finalDistance;
 };
 
-export const randomCity = (max) => {
+export const randomNumber = (max) => {
   return Math.floor(Math.random() * (max + 1));
+};
+
+export const malus = (pastPoints, distance) => {
+  const dist = Math.round(distance);
+  newPoints = pastPoints - dist;
+  return newPoints;
 };
