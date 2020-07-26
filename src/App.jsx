@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MapOverlay } from "./components/MapOverlay";
 import Score from "./components/Score";
 import {
@@ -17,7 +17,12 @@ import { useStyles } from "./data/materialStyles";
 import { Drawer as MyDrawer } from "./components/Drawer";
 import { Modal } from "./components/Modal";
 import * as capitalCities from "./data/capitalCities.json";
-import { haversineDistance, randomNumber, malus } from "./data/maths";
+import {
+  haversineDistance,
+  randomNumber,
+  malus,
+  roundNumber,
+} from "./data/maths";
 
 const App = () => {
   const classes = useStyles();
@@ -25,9 +30,9 @@ const App = () => {
   const [points, setPoints] = useState(1500);
   const [successes, setSuccesses] = useState(0);
   const [question, setQuestion] = useState({});
-  const [distance, setDistance] = useState(null);
+  const [distance, setDistance] = useState(0);
   const [result, setResult] = useState({});
-  const [display, setDisplay] = useState("none");
+  const [display, setDisplay] = useState(false);
   const [showDistance, setShowDistance] = useState(false);
   const [showEndGame, setShowEndGame] = useState(false);
 
@@ -35,8 +40,7 @@ const App = () => {
   const totalCities = city.length;
 
   const setRandomCity = () => {
-    const capital = city[randomCity(totalCities)];
-    console.log(capital);
+    const capital = city[randomNumber(totalCities)];
     return { name: capital.capitalCity, lat: capital.lat, lng: capital.long };
   };
 
@@ -48,33 +52,70 @@ const App = () => {
     setQuestion(setRandomCity);
   }, []);
 
+  useEffect(() => {
+    newPoints();
+  }, [distance]);
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
   const onMapClick = (coordinates) => {
     setResult(coordinates);
-    // setDistance(
-    //   haversineDistance(
-    //     { lat: question.lat, lng: question.lng },
-    //     {
-    //       lat: event.latLng.lat(),
-    //       lng: event.latLng.lng(),
-    //     }
-    //   )
-    // );
+  };
+
+  const calculateDistance = () => {
+    return haversineDistance(
+      { lat: question.lat, lng: question.lng },
+      { lat: result.lat, lng: result.lng }
+    );
+  };
+
+  const updateInfo = () => {
+    const dist = calculateDistance();
+    setDistance(dist);
+    setDisplay(true);
+    setSuccesses(successes + 1);
+  };
+
+  const newPoints = () => {
+    const dist = roundNumber(distance);
+    const newPoints = malus(points, dist);
+    setPoints(newPoints);
+  };
+
+  const bureaucracy = () => {
+    if (points <= 0) {
+      setTimeout(() => {
+        handleShowEnd();
+      }, 1500);
+    } else {
+      setTimeout(() => {
+        handleShowDistance();
+      }, 1500);
+    }
   };
 
   const onSubmit = () => {
-    console.log("hola");
+    updateInfo();
+    bureaucracy();
   };
 
   const handleShowDistance = () => {
     setShowDistance(!showDistance);
+    if (!showDistance) {
+      setQuestion(setRandomCity);
+      setDisplay(false);
+      setResult({});
+    }
   };
 
   const handleShowEnd = () => {
     setShowEndGame(!showEndGame);
+    setSuccesses(0);
+    setPoints(1500);
+    setDisplay(false);
+    setResult({});
   };
 
   return (
@@ -94,7 +135,7 @@ const App = () => {
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer}>
-        <Hidden smUp implementation="css">
+        <Hidden mdUp implementation="css">
           <Drawer
             variant="temporary"
             anchor="left"
@@ -110,7 +151,7 @@ const App = () => {
             <MyDrawer />
           </Drawer>
         </Hidden>
-        <Hidden xsDown implementation="css">
+        <Hidden smDown implementation="css">
           <Drawer
             classes={{
               paper: classes.drawerPaper,
@@ -127,15 +168,14 @@ const App = () => {
         <Score successes={successes} points={points} cityName={question.name} />
         <br />
         <MapOverlay
-          style={{ margin: "0 40px" }}
-          distance={distance}
+          className="map"
           question={question}
           result={result}
           onMapClick={onMapClick}
           display={display}
         />
         <Button
-          style={{ margin: "1rem 40%" }}
+          style={{ margin: "1rem 0" }}
           variant="contained"
           color="secondary"
           onClick={onSubmit}
@@ -148,14 +188,23 @@ const App = () => {
         onClose={handleShowDistance}
         TransitionComponent={Transition}
       >
-        <Modal title={} content={} />
+        <Modal
+          title={`${distance <= 50 ? "BullsEye!" : "Congrats!"}`}
+          content={`Your position has remained ${roundNumber(
+            distance
+          )}km close from its actual position.
+          ${distance <= 50 ? "It has been a complete SUCCESS." : ""}`}
+        />
       </Dialog>
       <Dialog
         open={showEndGame}
         onClose={handleShowEnd}
         TransitionComponent={Transition}
       >
-        <Modal title={} content={} />
+        <Modal
+          title={"Game Over"}
+          content={`You has managed to place ${successes} cities!`}
+        />
       </Dialog>
     </div>
   );

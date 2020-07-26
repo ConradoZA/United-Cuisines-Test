@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useRef } from "react";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import mapStyles from "../data/mapStyles";
 
@@ -17,10 +17,10 @@ export const Map = ({ question, result, onMapClick, display }) => {
     mapRef.current.setZoom(number);
   };
 
-  const onLoad = useCallback((map) => {
+  const onLoad = (map) => {
     mapRef.current = map;
     panTo(EUROPE_CENTER);
-  }, []);
+  };
 
   const onClick = (event) => {
     const coordinates = { lat: event.latLng.lat(), lng: event.latLng.lng() };
@@ -60,24 +60,24 @@ export const Map = ({ question, result, onMapClick, display }) => {
       onLoad={onLoad}
       onClick={onClick}
     >
+      {display && (
+        <Marker
+          position={{ lat: +question.lat, lng: +question.lng }}
+          icon={{
+            url: `/gps.svg`,
+            scaledSize: new window.google.maps.Size(20, 20),
+            style: { display: display },
+          }}
+        />
+      )}
       {Object.keys(result).length > 0 && (
-        <>
-          <Marker
-            position={{ lat: +question.lat, lng: +question.lng }}
-            icon={{
-              url: `/gps.svg`,
-              scaledSize: new window.google.maps.Size(20, 20),
-              style: { display: display },
-            }}
-          />
-          <Marker
-            position={{ lat: result.lat, lng: result.lng }}
-            icon={{
-              url: `/location-pin.svg`,
-              scaledSize: new window.google.maps.Size(20, 30),
-            }}
-          />
-        </>
+        <Marker
+          position={{ lat: result.lat, lng: result.lng }}
+          icon={{
+            url: `/location-pin.svg`,
+            scaledSize: new window.google.maps.Size(20, 30),
+          }}
+        />
       )}
     </GoogleMap>
   );

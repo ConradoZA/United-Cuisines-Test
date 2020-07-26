@@ -19,9 +19,22 @@ code {
 
 .paper {
   text-align: center;
+  width     : 50%;
+  margin    : 0 auto
 }
-/* .center{
+
+.flex {
   display: flex;
+}
+
+.column {
   flex-direction: column;
-  justify-content: center;
-} */
+}
+
+.transCenter {
+  align-items: center;
+}
+
+.bolder {
+  font-weight: 800;
+}

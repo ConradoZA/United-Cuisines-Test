@@ -23,6 +23,8 @@ export const haversineDistance = (question, answer) => {
 
   const finalDistance = EARTH_RADIUS_KM * c;
 
+  if (!finalDistance) return 0;
+
   return finalDistance;
 };
 
@@ -30,8 +32,11 @@ export const randomNumber = (max) => {
   return Math.floor(Math.random() * (max + 1));
 };
 
+export const roundNumber = (number) => {
+  return Math.round(number);
+};
+
 export const malus = (pastPoints, distance) => {
-  const dist = Math.round(distance);
-  newPoints = pastPoints - dist;
-  return newPoints;
+  const dist = roundNumber(distance);
+  return pastPoints - dist;
 };

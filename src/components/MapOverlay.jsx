@@ -1,22 +1,10 @@
 import React from "react";
-import { useLoadScript } from "@react-google-maps/api";
+import { LoadScript } from "@react-google-maps/api";
 import { Map } from "./Map";
 
-export const MapOverlay = ({
-  distance,
-  question,
-  result,
-  onMapClick,
-  display,
-}) => {
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_KEY,
-  });
-  if (loadError) return <div>Error loading maps</div>;
-  if (!isLoaded) return <div>Loading...</div>;
-
+export const MapOverlay = ({ question, result, onMapClick, display }) => {
   return (
-    <div>
+    <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_KEY}>
       <Map
         className="map"
         onMapClick={onMapClick}
@@ -24,6 +12,6 @@ export const MapOverlay = ({
         result={result}
         display={display}
       />
-    </div>
+    </LoadScript>
   );
 };
