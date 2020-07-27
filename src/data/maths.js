@@ -29,7 +29,7 @@ export const haversineDistance = (question, answer) => {
 };
 
 export const randomNumber = (max) => {
-  return Math.floor(Math.random() * (max + 1));
+  return Math.floor(Math.random() * max);
 };
 
 export const roundNumber = (number) => {

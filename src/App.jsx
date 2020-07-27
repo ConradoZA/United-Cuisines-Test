@@ -39,8 +39,11 @@ const App = () => {
   const city = capitalCities.capitalCities;
   const totalCities = city.length;
 
-  const setRandomCity = () => {
-    const capital = city[randomNumber(totalCities)];
+  const createRandomCity = () => {
+    console.log(city);
+    const number = randomNumber(totalCities);
+    const capital = city[number];
+    console.log(capital);
     return { name: capital.capitalCity, lat: capital.lat, lng: capital.long };
   };
 
@@ -49,7 +52,7 @@ const App = () => {
   });
 
   useEffect(() => {
-    setQuestion(setRandomCity);
+    newQuestion();
   }, []);
 
   useEffect(() => {
@@ -75,7 +78,8 @@ const App = () => {
     const dist = calculateDistance();
     setDistance(dist);
     setDisplay(true);
-    setSuccesses(successes + 1);
+    const newSuccess = successes + 1;
+    setSuccesses(newSuccess);
   };
 
   const newPoints = () => {
@@ -84,38 +88,54 @@ const App = () => {
     setPoints(newPoints);
   };
 
+  const newQuestion = () => {
+    const randomCity = createRandomCity();
+    setQuestion(randomCity);
+  };
+
   const bureaucracy = () => {
     if (points <= 0) {
-      setTimeout(() => {
-        handleShowEnd();
-      }, 1500);
+      handleShowEnd();
     } else {
-      setTimeout(() => {
-        handleShowDistance();
-      }, 1500);
+      handleShowDistance();
     }
   };
 
   const onSubmit = () => {
     updateInfo();
-    bureaucracy();
+
+    setTimeout(() => {
+      bureaucracy(points);
+      clearTurn();
+      newQuestion();
+    }, 1500);
   };
 
+  const clearTurn = () => {
+    setDisplay(false);
+    setResult({});
+  };
+  const clearGame = () => {
+    setSuccesses(0);
+    setPoints(1500);
+  };
+
+  //BUG: Freezes, WHY?!?!?
   const handleShowDistance = () => {
-    setShowDistance(!showDistance);
-    if (!showDistance) {
-      setQuestion(setRandomCity);
-      setDisplay(false);
-      setResult({});
-    }
+    setShowDistance(true);
+  };
+
+  const handleHideDistance = () => {
+    setShowDistance(false);
   };
 
   const handleShowEnd = () => {
-    setShowEndGame(!showEndGame);
-    setSuccesses(0);
-    setPoints(1500);
-    setDisplay(false);
-    setResult({});
+    setShowEndGame(true);
+  };
+
+  const handleHideEnd = () => {
+    setShowEndGame(false);
+    clearGame();
   };
 
   return (
@@ -185,7 +205,7 @@ const App = () => {
       </main>
       <Dialog
         open={showDistance}
-        onClose={handleShowDistance}
+        onClose={handleHideDistance}
         TransitionComponent={Transition}
       >
         <Modal
@@ -198,7 +218,7 @@ const App = () => {
       </Dialog>
       <Dialog
         open={showEndGame}
-        onClose={handleShowEnd}
+        onClose={handleHideEnd}
         TransitionComponent={Transition}
       >
         <Modal

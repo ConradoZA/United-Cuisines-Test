@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useCallback } from "react";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import mapStyles from "../data/mapStyles";
 
@@ -10,24 +10,24 @@ export const Map = ({ question, result, onMapClick, display }) => {
     lng: 8.67949,
   };
 
-  const panTo = (coordinates) => {
+  const panTo = useCallback((coordinates) => {
     mapRef.current.panTo(coordinates);
-  };
-  const setZoom = (number) => {
+  }, []);
+  const setZoom = useCallback((number) => {
     mapRef.current.setZoom(number);
-  };
+  }, []);
 
-  const onLoad = (map) => {
+  const onLoad = useCallback((map) => {
     mapRef.current = map;
     panTo(EUROPE_CENTER);
-  };
+  }, []);
 
-  const onClick = (event) => {
+  const onClick = useCallback((event) => {
     const coordinates = { lat: event.latLng.lat(), lng: event.latLng.lng() };
     panTo(coordinates);
     setZoom(5);
     onMapClick(coordinates);
-  };
+  }, []);
 
   const CONTAINER_STYLE = {
     width: "100vmin",
