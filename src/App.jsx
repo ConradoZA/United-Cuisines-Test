@@ -40,10 +40,8 @@ const App = () => {
   const totalCities = city.length;
 
   const createRandomCity = () => {
-    console.log(city);
     const number = randomNumber(totalCities);
     const capital = city[number];
-    console.log(capital);
     return { name: capital.capitalCity, lat: capital.lat, lng: capital.long };
   };
 
@@ -54,6 +52,20 @@ const App = () => {
   useEffect(() => {
     newPoints();
   }, [distance]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (points !== 1500) {
+        clearTurn();
+        if (points <= 0) {
+          handleShowEnd();
+        } else {
+          handleShowDistance();
+        }
+      }
+      newQuestion();
+    }, 1500);
+  }, [points]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -89,22 +101,8 @@ const App = () => {
     setQuestion(randomCity);
   };
 
-  const bureaucracy = () => {
-    if (points <= 0) {
-      handleShowEnd();
-    } else {
-      handleShowDistance();
-    }
-  };
-
   const onSubmit = () => {
     updateInfo();
-
-    setTimeout(() => {
-      bureaucracy(points);
-      clearTurn();
-      newQuestion();
-    }, 1500);
   };
 
   const clearTurn = () => {

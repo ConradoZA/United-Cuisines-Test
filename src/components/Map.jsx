@@ -1,8 +1,9 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import mapStyles from "../data/mapStyles";
 
 export const Map = ({ question, result, onMapClick, display }) => {
+  const quiz = { lat: +question.lat, lng: +question.lng };
   const mapRef = useRef();
 
   const EUROPE_CENTER = {
@@ -10,12 +11,24 @@ export const Map = ({ question, result, onMapClick, display }) => {
     lng: 8.67949,
   };
 
-  const panTo = useCallback((coordinates) => {
+  useEffect(() => {
+    if (mapRef.current) {
+      if (!display) {
+        panTo(EUROPE_CENTER);
+        setZoom(2);
+      } else {
+        setZoom(6);
+        panTo(quiz);
+      }
+    }
+  }, [display]);
+
+  const panTo = (coordinates) => {
     mapRef.current.panTo(coordinates);
-  }, []);
-  const setZoom = useCallback((number) => {
+  };
+  const setZoom = (number) => {
     mapRef.current.setZoom(number);
-  }, []);
+  };
 
   const onLoad = useCallback((map) => {
     mapRef.current = map;
@@ -25,7 +38,6 @@ export const Map = ({ question, result, onMapClick, display }) => {
   const onClick = useCallback((event) => {
     const coordinates = { lat: event.latLng.lat(), lng: event.latLng.lng() };
     panTo(coordinates);
-    setZoom(5);
     onMapClick(coordinates);
   }, []);
 
@@ -62,7 +74,7 @@ export const Map = ({ question, result, onMapClick, display }) => {
     >
       {display && (
         <Marker
-          position={{ lat: +question.lat, lng: +question.lng }}
+          position={quiz}
           icon={{
             url: `/gps.svg`,
             scaledSize: new window.google.maps.Size(20, 20),
@@ -72,7 +84,7 @@ export const Map = ({ question, result, onMapClick, display }) => {
       )}
       {Object.keys(result).length > 0 && (
         <Marker
-          position={{ lat: result.lat, lng: result.lng }}
+          position={result}
           icon={{
             url: `/location-pin.svg`,
             scaledSize: new window.google.maps.Size(20, 30),
