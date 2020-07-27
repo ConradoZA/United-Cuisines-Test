@@ -1,44 +1,63 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Game of Capitals
 
-## Available Scripts
+A technical Skills Test I did on July $\sqrt[th]{25}$.
+A simple game where you have to place a mark on the map where you think is one of the capital cities of Europe.
 
-In the project directory, you can run:
+- ⚓ [Requires](#user-content-requires)
+- 🏁 [Quick Start](#user-content-quick-start)
+- 🚥 [Step by Step](#user-content-step-by-step)
+- 🚀 [Try it out](#user-content-try-it-out)
 
-### `npm start`
+---
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## ⚓ Requires
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+- [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- [Node.js](https://nodejs.org)
 
-### `npm test`
+## 🏁 Quick Start
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Ensure [requirements](#user-content-requires) are met, then execute the following in a terminal.
 
-### `npm run build`
+```bash
+git clone https://github.com/ConradoZA/United-Cuisines-Test.git
+cd United-Cuisines-Test/
+npm install
+npm start
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+For explanation about these steps, continue reading the [next section](#user-content-step-by-step).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🚥 Step by Step
 
-### `npm run eject`
+### Clone the repository
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+git clone https://github.com/ConradoZA/United-Cuisines-Test.git
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Move into the newly created folder
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+cd United-Cuisines-Test/
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Install node_modules
 
-## Learn More
+```bash
+npm install
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Start the program
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm start
+```
+
+Your default browser will open a new tab with localhost:3000 URL.
+
+## 🚀 Try it out
+
+_If you don't want to install the package but still want to try it, you can go to [https://game-of-capitals.herokuapp.com/](https://game-of-capitals.herokuapp.com/)_
+_(Don't panic if it takes time to load)_
