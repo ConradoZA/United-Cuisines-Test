@@ -1,6 +1,6 @@
 # Game of Capitals
 
-A technical Skills Test I did on July $\sqrt[th]{25}$.
+A technical Skills Test I did on July 25, 2020.
 A simple game where you have to place a mark on the map where you think is one of the capital cities of Europe.
 
 - ⚓ [Requires](#user-content-requires)
