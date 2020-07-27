@@ -47,10 +47,6 @@ const App = () => {
     return { name: capital.capitalCity, lat: capital.lat, lng: capital.long };
   };
 
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="down" ref={ref} {...props} />;
-  });
-
   useEffect(() => {
     newQuestion();
   }, []);
@@ -120,7 +116,6 @@ const App = () => {
     setPoints(1500);
   };
 
-  //BUG: Freezes, WHY?!?!?
   const handleShowDistance = () => {
     setShowDistance(true);
   };
@@ -203,11 +198,7 @@ const App = () => {
           Answer
         </Button>
       </main>
-      <Dialog
-        open={showDistance}
-        onClose={handleHideDistance}
-        TransitionComponent={Transition}
-      >
+      <Dialog open={showDistance} onClose={handleHideDistance}>
         <Modal
           title={`${distance <= 50 ? "BullsEye!" : "Congrats!"}`}
           content={`Your position has remained ${roundNumber(
@@ -216,11 +207,7 @@ const App = () => {
           ${distance <= 50 ? "It has been a complete SUCCESS." : ""}`}
         />
       </Dialog>
-      <Dialog
-        open={showEndGame}
-        onClose={handleHideEnd}
-        TransitionComponent={Transition}
-      >
+      <Dialog open={showEndGame} onClose={handleHideEnd}>
         <Modal
           title={"Game Over"}
           content={`You has managed to place ${successes} cities!`}
